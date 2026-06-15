@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLIP//FORGE | FPS特化 切り抜き・ショート編集サービス【サンプルLP】</title>
+<meta name="description" content="CoD/APEX配信者のための切り抜き・ショート編集。現役FPS配信者×AI検出パイプラインが、あなたのベストキルを最速で武器に変える。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #00f0ff;
+    --magenta: #ff2e88;
+    --yellow: #fcee0a;
+    --bg: #07070f;
+    --bg2: #0d0d1a;
+    --panel: #11111f;
+    --ink: #e8e8f0;
+    --sub: #8a8aa0;
+    --line: rgba(0, 240, 255, .25);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Noto Sans JP", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+  /* グリッド背景 + スキャンライン */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      linear-gradient(rgba(0,240,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,240,255,.04) 1px, transparent 1px);
+    background-size: 44px 44px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0 2px, transparent 2px 4px);
+    pointer-events: none;
+    z-index: 1;
+    opacity: .5;
+  }
+  main, header, footer { position: relative; z-index: 2; }
+  img { max-width: 100%; display: block; }
+  .inner { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+  section { padding: 80px 0; }
+  .mono { font-family: "Share Tech Mono", monospace; }
+  .orbitron { font-family: "Orbitron", sans-serif; }
+
+  .sec-label {
+    font-family: "Share Tech Mono", monospace;
+    color: var(--magenta);
+    font-size: 13px;
+    letter-spacing: .3em;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .sec-title {
+    text-align: center;
+    font-size: clamp(24px, 4.5vw, 36px);
+    font-weight: 900;
+    margin-bottom: 14px;
+    text-shadow: 0 0 18px rgba(0,240,255,.35);
+  }
+  .sec-title span { color: var(--cyan); }
+  .sec-lead { text-align: center; color: var(--sub); margin-bottom: 52px; font-size: 14px; }
+
+  /* ===== 斜めカットパネル共通 ===== */
+  .cut-panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    position: relative;
+  }
+
+  /* ===== CTAボタン ===== */
+  .btn-cta {
+    display: inline-block;
+    font-family: "Orbitron", "Noto Sans JP", sans-serif;
+    font-weight: 900;
+    font-size: clamp(15px, 2.4vw, 19px);
+    color: #07070f;
+    background: linear-gradient(90deg, var(--cyan), #7df9ff);
+    padding: 18px 52px;
+    text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    box-shadow: 0 0 24px rgba(0,240,255,.55), 0 0 60px rgba(0,240,255,.2);
+    transition: transform .15s, box-shadow .15s;
+    letter-spacing: .05em;
+  }
+  .btn-cta:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 0 36px rgba(0,240,255,.8), 0 0 90px rgba(0,240,255,.3); }
+  .btn-cta small { display: block; font-family: "Noto Sans JP", sans-serif; font-size: 11px; font-weight: 700; }
+  .btn-cta.magenta {
+    background: linear-gradient(90deg, var(--magenta), #ff7ab8);
+    box-shadow: 0 0 24px rgba(255,46,136,.55), 0 0 60px rgba(255,46,136,.2);
+    color: #fff;
+  }
+  .btn-cta.magenta:hover { box-shadow: 0 0 36px rgba(255,46,136,.8), 0 0 90px rgba(255,46,136,.3); }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: 90px 0 70px;
+    background:
+      radial-gradient(ellipse at 15% 10%, rgba(255,46,136,.16), transparent 45%),
+      radial-gradient(ellipse at 85% 80%, rgba(0,240,255,.14), transparent 45%),
+      linear-gradient(180deg, #0a0a16, #07070f);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .hero .sys-log {
+    font-family: "Share Tech Mono", monospace;
+    color: var(--cyan);
+    font-size: 12px;
+    letter-spacing: .18em;
+    border: 1px solid var(--line);
+    display: inline-block;
+    padding: 6px 18px;
+    margin-bottom: 28px;
+    background: rgba(0,240,255,.05);
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+  .hero h1 {
+    font-size: clamp(30px, 6.5vw, 58px);
+    font-weight: 900;
+    line-height: 1.35;
+    margin-bottom: 22px;
+  }
+  .hero h1 .glitch {
+    position: relative;
+    color: var(--cyan);
+    text-shadow: 0 0 24px rgba(0,240,255,.6);
+    display: inline-block;
+    animation: glitch-skew 4s infinite;
+  }
+  .hero h1 .glitch::before,
+  .hero h1 .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+  }
+  .hero h1 .glitch::before {
+    color: var(--magenta);
+    z-index: -1;
+    animation: glitch-shift 3.2s infinite steps(1);
+  }
+  .hero h1 .glitch::after {
+    color: var(--yellow);
+    z-index: -2;
+    animation: glitch-shift 2.7s infinite steps(1) reverse;
+    opacity: .7;
+  }
+  @keyframes glitch-shift {
+    0%, 92% { transform: translate(0,0); clip-path: inset(0 0 0 0); }
+    93% { transform: translate(-3px, 2px); clip-path: inset(10% 0 55% 0); }
+    95% { transform: translate(3px, -2px); clip-path: inset(60% 0 8% 0); }
+    97% { transform: translate(-2px, 1px); clip-path: inset(30% 0 35% 0); }
+    98% { transform: translate(0,0); clip-path: inset(0 0 0 0); }
+  }
+  @keyframes glitch-skew {
+    0%, 94% { transform: skew(0); }
+    95% { transform: skew(-1.5deg); }
+    96% { transform: skew(1deg); }
+    97% { transform: skew(0); }
+  }
+  .hero p.sub { color: var(--sub); font-size: clamp(13px, 2.4vw, 16px); margin-bottom: 38px; }
+  .hero p.sub b { color: var(--ink); }
+  .hero .stats { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 42px; }
+  .hero .stat {
+    border: 1px solid var(--line);
+    background: rgba(17,17,31,.8);
+    padding: 14px 26px;
+    min-width: 156px;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .hero .stat b {
+    font-family: "Orbitron", sans-serif;
+    font-size: 26px;
+    color: var(--yellow);
+    text-shadow: 0 0 14px rgba(252,238,10,.45);
+  }
+  .hero .stat span { display: block; font-size: 11px; color: var(--sub); letter-spacing: .1em; }
+
+  /* ===== 悩み ===== */
+  .worries { background: var(--bg2); border-bottom: 1px solid var(--line); }
+  .worry-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .worry {
+    padding: 20px 22px;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    background: var(--panel);
+    border: 1px solid rgba(255,46,136,.3);
+    border-left: 3px solid var(--magenta);
+  }
+  .worry .err {
+    font-family: "Share Tech Mono", monospace;
+    color: var(--magenta);
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .worries .conclusion {
+    margin-top: 44px;
+    text-align: center;
+    font-size: clamp(16px, 3vw, 22px);
+    font-weight: 900;
+  }
+  .worries .conclusion .hl { color: var(--cyan); text-shadow: 0 0 16px rgba(0,240,255,.5); }
+
+  /* ===== 強み ===== */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 22px; }
+  .feature { padding: 30px 26px; }
+  .feature .tag {
+    font-family: "Share Tech Mono", monospace;
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: .25em;
+    display: block;
+    margin-bottom: 14px;
+  }
+  .feature .icon { font-size: 40px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(0,240,255,.5)); }
+  .feature h3 { font-size: 18px; font-weight: 900; margin-bottom: 10px; line-height: 1.5; }
+  .feature h3 em { font-style: normal; color: var(--magenta); }
+  .feature p { font-size: 13px; color: var(--sub); }
+
+  /* ===== 制作フロー ===== */
+  .flow { background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .flow-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; counter-reset: step; }
+  .step {
+    padding: 26px 22px;
+    text-align: center;
+    counter-increment: step;
+  }
+  .step::before {
+    content: "0" counter(step);
+    font-family: "Orbitron", sans-serif;
+    font-size: 30px;
+    font-weight: 900;
+    color: var(--magenta);
+    text-shadow: 0 0 16px rgba(255,46,136,.5);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .step h4 { font-size: 15px; font-weight: 900; margin-bottom: 8px; }
+  .step p { font-size: 12px; color: var(--sub); }
+  .flow-note { text-align: center; margin-top: 30px; font-size: 13px; color: var(--sub); }
+  .flow-note b { color: var(--yellow); }
+
+  /* ===== 料金 ===== */
+  .price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; align-items: stretch; }
+  .plan { padding: 0; display: flex; flex-direction: column; }
+  .plan .head {
+    padding: 16px;
+    text-align: center;
+    font-family: "Orbitron", "Noto Sans JP", sans-serif;
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: .1em;
+    border-bottom: 1px solid var(--line);
+    background: rgba(0,240,255,.06);
+  }
+  .plan.reco .head { background: rgba(255,46,136,.12); color: var(--magenta); }
+  .plan .body { padding: 26px 24px 30px; text-align: center; flex: 1; display: flex; flex-direction: column; }
+  .plan .price {
+    font-family: "Orbitron", sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--cyan);
+    text-shadow: 0 0 18px rgba(0,240,255,.45);
+    line-height: 1.3;
+  }
+  .plan.reco .price { color: var(--magenta); text-shadow: 0 0 18px rgba(255,46,136,.45); }
+  .plan .price small { font-size: 13px; font-family: "Noto Sans JP", sans-serif; color: var(--sub); }
+  .plan .reco-badge {
+    display: inline-block;
+    background: var(--magenta);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 3px 14px;
+    letter-spacing: .15em;
+    margin: 10px auto 4px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  }
+  .plan ul { list-style: none; text-align: left; margin-top: 18px; font-size: 13px; }
+  .plan li { padding: 8px 0 8px 26px; border-bottom: 1px dashed rgba(138,138,160,.25); position: relative; }
+  .plan li::before { content: ">"; position: absolute; left: 4px; color: var(--cyan); font-family: "Share Tech Mono", monospace; }
+  .price-note { text-align: center; margin-top: 26px; font-size: 12px; color: var(--sub); }
+
+  /* ===== FAQ ===== */
+  .faq { background: var(--bg2); border-top: 1px solid var(--line); }
+  .faq-item { max-width: 780px; margin: 0 auto 12px; border: 1px solid var(--line); background: var(--panel); }
+  .faq-item summary {
+    cursor: pointer;
+    padding: 16px 20px;
+    font-weight: 700;
+    font-size: 14px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::before {
+    content: "Q:";
+    font-family: "Share Tech Mono", monospace;
+    color: var(--cyan);
+    font-weight: 400;
+  }
+  .faq-item summary::after { content: "+"; margin-left: auto; color: var(--magenta); font-size: 20px; transition: transform .2s; }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item .answer { padding: 0 20px 16px 48px; font-size: 13px; color: var(--sub); }
+
+  /* ===== 最終CTA ===== */
+  .final-cta {
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(255,46,136,.18), transparent 55%),
+      radial-gradient(ellipse at 50% 0%, rgba(0,240,255,.12), transparent 55%),
+      var(--bg);
+    border-top: 1px solid var(--line);
+  }
+  .final-cta h2 { font-size: clamp(24px, 4.5vw, 38px); font-weight: 900; margin-bottom: 16px; }
+  .final-cta h2 span { color: var(--cyan); text-shadow: 0 0 20px rgba(0,240,255,.5); }
+  .final-cta p { color: var(--sub); margin-bottom: 34px; font-size: 14px; }
+  .slots {
+    font-family: "Share Tech Mono", monospace;
+    display: inline-block;
+    border: 1px solid rgba(252,238,10,.5);
+    color: var(--yellow);
+    background: rgba(252,238,10,.06);
+    padding: 8px 22px;
+    font-size: 13px;
+    letter-spacing: .12em;
+    margin-bottom: 30px;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 11px;
+    color: var(--sub);
+    padding: 30px 20px;
+    background: #050509;
+  }
+  footer .sample-note { color: var(--yellow); font-weight: 700; margin-bottom: 6px; }
+  footer .mono { letter-spacing: .15em; margin-top: 8px; color: rgba(0,240,255,.5); }
+
+  /* ===== 追従CTA ===== */
+  .sticky-cta {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(7,7,15,.92);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line);
+    padding: 10px 16px;
+    text-align: center;
+    z-index: 100;
+    transform: translateY(110%);
+    transition: transform .3s;
+  }
+  .sticky-cta.show { transform: translateY(0); }
+  .sticky-cta .btn-cta { padding: 12px 38px; font-size: 14px; }
+
+  @media (max-width: 600px) {
+    section { padding: 60px 0; }
+    .hero { min-height: auto; padding: 80px 0 60px; }
+  }
+  /* 全ページキャプチャ時(超縦長ビューポート)にヒーローが間延びしないよう固定 */
+  @media (min-height: 1500px) {
+    .hero { min-height: 736px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="inner">
+    <span class="sys-log">// SYSTEM ONLINE :: FPS CLIP DIVISION</span>
+    <h1>あなたのベストキルを、<br><span class="glitch" data-text="バズる武器">バズる武器</span>に変える。</h1>
+    <p class="sub">CoD / APEX 特化の切り抜き・ショート編集サービス <b>CLIP//FORGE</b>。<br>現役FPS配信者 × AIキル検出パイプラインが、配信VODから「伸びる瞬間」だけを抽出します。</p>
+    <div class="stats">
+      <div class="stat"><b>48h</b><span>最短納品スピード</span></div>
+      <div class="stat"><b>100%</b><span>FPS案件特化率</span></div>
+      <div class="stat"><b>AI+人力</b><span>キル検出×編集の二段構え</span></div>
+    </div>
+    <a class="btn-cta" href="#price">料金プランを見る<small>ショート1本 3,000円〜</small></a>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ 悩み ============ -->
+<section class="worries">
+  <div class="inner">
+    <div class="sec-label">[ ERROR_LOG ]</div>
+    <h2 class="sec-title">配信者のあなた、<span>こうなっていませんか?</span></h2>
+    <p class="sec-lead">配信は続けられても、切り抜きが続かない。それが一番もったいない。</p>
+    <div class="worry-list">
+      <div class="worry"><span class="err">[ERR_01]</span>配信で神プレーが出ても、切り抜く時間がなくてVODに埋もれていく</div>
+      <div class="worry"><span class="err">[ERR_02]</span>編集を覚えようとしたが、Premiereの学習コストで挫折した</div>
+      <div class="worry"><span class="err">[ERR_03]</span>ショートを出しても再生が伸びず、何が悪いのかわからない</div>
+      <div class="worry"><span class="err">[ERR_04]</span>編集者に頼んだら、FPSがわからない人でキルの価値が伝わらなかった</div>
+    </div>
+    <p class="conclusion">その全部、<span class="hl">FPSがわかる編集チーム</span>に投げてください。</p>
+  </div>
+</section>
+
+<!-- ============ 強み ============ -->
+<section>
+  <div class="inner">
+    <div class="sec-label">[ CORE_SYSTEM ]</div>
+    <h2 class="sec-title">CLIP//FORGE の<span>3つの武装</span></h2>
+    <p class="sec-lead">「ゲームがわかる」×「機械で速い」×「型で伸ばす」。</p>
+    <div class="features-grid">
+      <div class="feature cut-panel">
+        <span class="tag">WEAPON_01</span>
+        <div class="icon">🎯</div>
+        <h3>現役FPS配信者が<br><em>キルの価値</em>を理解して編集</h3>
+        <p>1v3クラッチと漁夫の1キルの違いがわかる編集者が担当。「どこで視聴者の心拍が上がるか」をプレイヤー目線で判断し、見せ場の0.5秒を逃しません。</p>
+      </div>
+      <div class="feature cut-panel">
+        <span class="tag">WEAPON_02</span>
+        <div class="icon">⚡</div>
+        <h3>AIキル検出パイプラインで<br><em>最短48時間</em>納品</h3>
+        <p>自社開発のキル自動検出システムが数時間のVODを全スキャン。人間は「選ぶ」と「磨く」に集中するから、高品質のまま圧倒的な速度で納品できます。</p>
+      </div>
+      <div class="feature cut-panel">
+        <span class="tag">WEAPON_03</span>
+        <div class="icon">📈</div>
+        <h3>バズるショートの<br><em>「型」を実装</em>して構成</h3>
+        <p>冒頭2秒のフック、キルカウンター、テンポを殺さないカット割り。伸びているFPSショートを分析した構成テンプレートに、あなたのクリップを流し込みます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ フロー ============ -->
+<section class="flow">
+  <div class="inner">
+    <div class="sec-label">[ PROCESS ]</div>
+    <h2 class="sec-title">納品まで<span>4ステップ</span></h2>
+    <p class="sec-lead">あなたがやることは「VODを渡す」だけ。</p>
+    <div class="flow-steps">
+      <div class="step cut-panel">
+        <h4>VOD共有</h4>
+        <p>配信アーカイブのURLか動画ファイルを共有。ギガファイル便/Drive対応。</p>
+      </div>
+      <div class="step cut-panel">
+        <h4>AIスキャン</h4>
+        <p>キル検出パイプラインが全編を解析し、ハイライト候補を自動抽出。</p>
+      </div>
+      <div class="step cut-panel">
+        <h4>編集・演出</h4>
+        <p>テロップ・SE・キルカウンター・縦型リフレームまで一括で仕上げ。</p>
+      </div>
+      <div class="step cut-panel">
+        <h4>納品・修正</h4>
+        <p>プレビュー確認後に納品。修正2回まで無料で対応します。</p>
+      </div>
+    </div>
+    <p class="flow-note">対応タイトル:<b>CoD Warzone / APEX Legends</b>(その他FPSはご相談ください)</p>
+  </div>
+</section>
+
+<!-- ============ 料金 ============ -->
+<section id="price">
+  <div class="inner">
+    <div class="sec-label">[ PRICE_LIST ]</div>
+    <h2 class="sec-title"><span>料金プラン</span></h2>
+    <p class="sec-lead">単発でも、毎週の運用代行でも。すべて税込・見積無料。</p>
+    <div class="price-grid">
+      <div class="plan cut-panel">
+        <div class="head">SINGLE</div>
+        <div class="body">
+          <div class="price">3,000<small>円/本</small></div>
+          <ul>
+            <li>ショート1本(〜60秒)</li>
+            <li>テロップ+SE+キルカウンター</li>
+            <li>縦型リフレーム込み</li>
+            <li>納品 最短48時間</li>
+            <li>修正2回無料</li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan reco cut-panel">
+        <div class="head">WEEKLY OPS</div>
+        <div class="body">
+          <div class="price">20,000<small>円/月</small></div>
+          <span class="reco-badge">RECOMMENDED</span>
+          <ul>
+            <li>ショート週2本×4週(計8本)</li>
+            <li>単発比 1本3,000円→2,500円相当(計4,000円分お得)</li>
+            <li>VODから見せ場の選定もおまかせ</li>
+            <li>投稿用タイトル・ハッシュタグ案付き</li>
+            <li>優先納品キュー</li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan cut-panel">
+        <div class="head">FULL DIVE</div>
+        <div class="body">
+          <div class="price">60,000<small>円/月〜</small></div>
+          <ul>
+            <li>ショート週4本+横型キル集 月1本</li>
+            <li>チャンネル分析レポート月次</li>
+            <li>サムネイル制作込み</li>
+            <li>構成の継続チューニング</li>
+            <li>専用優先レーン</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p class="price-note">※表示価格はサンプルです。素材の長さ・演出量により変動します。まずは無料見積もりへ。</p>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq">
+  <div class="inner">
+    <div class="sec-label">[ FAQ ]</div>
+    <h2 class="sec-title">よくある<span>質問</span></h2>
+    <p class="sec-lead">その他の質問はDMでお気軽にどうぞ。</p>
+    <details class="faq-item">
+      <summary>配信アーカイブが3〜4時間ありますが、全部見てくれるんですか?</summary>
+      <div class="answer">はい。AIキル検出パイプラインが全編をスキャンするため、長時間VODでも追加料金なしでハイライトを漏れなく抽出します。人間が全編を目視する方式ではないので、長さを気にせずお渡しください。</div>
+    </details>
+    <details class="faq-item">
+      <summary>著作権やゲームのガイドラインは大丈夫ですか?</summary>
+      <div class="answer">各タイトルの動画投稿ガイドラインに準拠した形で制作します。BGM・SEはすべて商用利用可能なライセンス素材のみを使用します。</div>
+    </details>
+    <details class="faq-item">
+      <summary>自分の編集スタイル(テロップの雰囲気など)に合わせてもらえますか?</summary>
+      <div class="answer">可能です。参考にしたい動画のURLを2〜3本いただければ、テロップ・テンポ・色味をそのテイストに寄せて制作します。継続プランでは専用テンプレートを作成し、毎回同じ世界観で納品します。</div>
+    </details>
+    <details class="faq-item">
+      <summary>支払い方法と契約の流れは?</summary>
+      <div class="answer">ココナラ経由またはお見積もり後の銀行振込に対応しています。単発プランはお試し利用も歓迎です。継続プランはいつでも翌月から停止できます。</div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 最終CTA ============ -->
+<section class="final-cta" id="cta">
+  <div class="inner">
+    <div class="sec-label">[ READY? ]</div>
+    <h2>埋もれていく神プレーを、<br><span>今夜から資産</span>に。</h2>
+    <p>無料見積もり・サンプル編集のご相談はDMから。VODのURLを1本送るだけでOKです。</p>
+    <div class="slots">// 今月の受付残り枠: 3 //</div>
+    <br>
+    <a class="btn-cta magenta" href="#" onclick="alert('サンプルLPのため、リンクはダミーです。'); return false;">無料で見積もりを依頼する<small>X(旧Twitter)のDMで完結</small></a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="sample-note">※このページはポートフォリオ用のサンプルLPです。「CLIP//FORGE」は架空のサービス名であり、表示価格・実績はサンプル表現です。</div>
+  <div>© 2026 CLIP//FORGE (Sample LP) — Produced by AI_STREAM_COMPANY / PRODUCT_TEAM</div>
+  <div class="mono">[ SESSION_END :: THANKS_FOR_SCROLLING ]</div>
+</footer>
+
+<!-- 追従CTA -->
+<div class="sticky-cta" id="stickyCta">
+  <a class="btn-cta" href="#price">3,000円/本〜 料金を見る</a>
+</div>
+
+<script>
+  const sticky = document.getElementById('stickyCta');
+  const hero = document.querySelector('.hero');
+  const finalCta = document.getElementById('cta');
+  window.addEventListener('scroll', () => {
+    const past = window.scrollY > hero.offsetHeight;
+    const nearEnd = finalCta.getBoundingClientRect().top < window.innerHeight;
+    sticky.classList.toggle('show', past && !nearEnd);
+  }, { passive: true });
+</script>
+
+</body>
+</html>

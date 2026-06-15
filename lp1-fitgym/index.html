@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FITLY | 自宅で変わる、オンラインパーソナルジム【サンプルLP】</title>
+<meta name="description" content="完全オンラインのパーソナルトレーニング。専属トレーナーとLINEで毎日伴走。今なら初月50%OFF。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-main: #16a34a;
+    --c-main-dark: #15803d;
+    --c-accent: #f59e0b;
+    --c-ink: #1f2937;
+    --c-sub: #6b7280;
+    --c-bg: #ffffff;
+    --c-bg-soft: #f0fdf4;
+    --c-bg-gray: #f9fafb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Noto Sans JP", sans-serif;
+    color: var(--c-ink);
+    background: var(--c-bg);
+    line-height: 1.8;
+  }
+  img { max-width: 100%; display: block; }
+  .inner { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  section { padding: 72px 0; }
+  .sec-title {
+    text-align: center;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 900;
+    margin-bottom: 12px;
+  }
+  .sec-title span { color: var(--c-main); }
+  .sec-lead {
+    text-align: center;
+    color: var(--c-sub);
+    margin-bottom: 48px;
+    font-size: 15px;
+  }
+
+  /* ===== CTA button ===== */
+  .btn-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--c-accent), #f97316);
+    color: #fff;
+    font-weight: 900;
+    font-size: clamp(16px, 2.5vw, 20px);
+    padding: 18px 56px;
+    border-radius: 999px;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(249, 115, 22, .35);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(249, 115, 22, .45); }
+  .btn-cta small { display: block; font-size: 12px; font-weight: 500; }
+
+  /* ===== Hero ===== */
+  .hero {
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(22,163,74,.18), transparent 50%),
+      radial-gradient(ellipse at 10% 90%, rgba(245,158,11,.14), transparent 50%),
+      linear-gradient(180deg, #052e16 0%, #14532d 100%);
+    color: #fff;
+    padding: 96px 0 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 999px;
+    padding: 6px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(30px, 6vw, 52px);
+    font-weight: 900;
+    line-height: 1.4;
+    margin-bottom: 20px;
+  }
+  .hero h1 .marker {
+    background: linear-gradient(transparent 60%, var(--c-accent) 60%);
+    padding: 0 4px;
+  }
+  .hero p.sub {
+    font-size: clamp(14px, 2.5vw, 17px);
+    opacity: .9;
+    margin-bottom: 36px;
+  }
+  .hero .stats {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .hero .stat {
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 12px;
+    padding: 14px 24px;
+    min-width: 150px;
+  }
+  .hero .stat b { font-size: 26px; color: #fde68a; }
+  .hero .stat span { display: block; font-size: 12px; opacity: .85; }
+
+  /* ===== 悩み ===== */
+  .worries { background: var(--c-bg-gray); }
+  .worry-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .worry {
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .worry::before {
+    content: "✓";
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--c-bg-soft);
+    color: var(--c-main);
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+  }
+  .worries .arrow {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--c-main);
+  }
+  .worries .arrow::after {
+    content: "";
+    display: block;
+    margin: 12px auto 0;
+    width: 0; height: 0;
+    border-left: 28px solid transparent;
+    border-right: 28px solid transparent;
+    border-top: 22px solid var(--c-main);
+  }
+
+  /* ===== 特長 ===== */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .feature {
+    background: var(--c-bg-soft);
+    border-radius: 16px;
+    padding: 32px 26px;
+    text-align: center;
+  }
+  .feature .num {
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--c-main);
+    letter-spacing: .15em;
+  }
+  .feature .icon { font-size: 44px; margin: 10px 0; }
+  .feature h3 { font-size: 19px; font-weight: 900; margin-bottom: 10px; }
+  .feature p { font-size: 14px; color: var(--c-sub); text-align: left; }
+
+  /* ===== 口コミ ===== */
+  .voices { background: var(--c-bg-gray); }
+  .voice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .voice {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  }
+  .voice .stars { color: var(--c-accent); letter-spacing: 2px; margin-bottom: 8px; }
+  .voice .meta { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .voice .avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c-main), #4ade80);
+    color: #fff;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+  }
+  .voice .meta b { font-size: 14px; }
+  .voice .meta span { display: block; font-size: 12px; color: var(--c-sub); }
+  .voice .result {
+    display: inline-block;
+    background: var(--c-bg-soft);
+    color: var(--c-main-dark);
+    font-weight: 900;
+    font-size: 13px;
+    border-radius: 6px;
+    padding: 2px 10px;
+    margin-bottom: 10px;
+  }
+  .voice p { font-size: 14px; color: var(--c-ink); }
+
+  /* ===== 料金 ===== */
+  .price-card {
+    max-width: 520px;
+    margin: 0 auto;
+    border: 3px solid var(--c-main);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(22,163,74,.18);
+  }
+  .price-card .head {
+    background: var(--c-main);
+    color: #fff;
+    text-align: center;
+    padding: 18px;
+    font-weight: 900;
+    font-size: 18px;
+  }
+  .price-card .body { padding: 36px 32px; text-align: center; }
+  .price-card .old {
+    color: var(--c-sub);
+    text-decoration: line-through;
+    font-size: 18px;
+  }
+  .price-card .now {
+    font-size: clamp(40px, 8vw, 56px);
+    font-weight: 900;
+    color: var(--c-main-dark);
+    line-height: 1.2;
+  }
+  .price-card .now small { font-size: 18px; }
+  .price-card .off-badge {
+    display: inline-block;
+    background: var(--c-accent);
+    color: #fff;
+    font-weight: 900;
+    border-radius: 999px;
+    padding: 4px 18px;
+    font-size: 14px;
+    margin: 10px 0 20px;
+  }
+  .price-card ul { list-style: none; text-align: left; margin-bottom: 8px; }
+  .price-card li {
+    padding: 10px 0 10px 32px;
+    border-bottom: 1px dashed #e5e7eb;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+  }
+  .price-card li::before {
+    content: "✓";
+    position: absolute;
+    left: 4px;
+    color: var(--c-main);
+    font-weight: 900;
+  }
+  .guarantee {
+    max-width: 520px;
+    margin: 28px auto 0;
+    background: var(--c-bg-soft);
+    border-radius: 12px;
+    padding: 18px 24px;
+    font-size: 14px;
+    text-align: center;
+  }
+  .guarantee b { color: var(--c-main-dark); }
+
+  /* ===== FAQ ===== */
+  .faq-item {
+    max-width: 760px;
+    margin: 0 auto 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .faq-item summary {
+    cursor: pointer;
+    padding: 18px 22px;
+    font-weight: 700;
+    font-size: 15px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::before {
+    content: "Q";
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--c-main);
+    color: #fff;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+  }
+  .faq-item summary::after {
+    content: "+";
+    margin-left: auto;
+    font-size: 22px;
+    color: var(--c-sub);
+    transition: transform .2s;
+  }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item .answer {
+    padding: 0 22px 18px 62px;
+    font-size: 14px;
+    color: var(--c-sub);
+    background: #fff;
+  }
+
+  /* ===== 最終CTA ===== */
+  .final-cta {
+    background: linear-gradient(180deg, #14532d, #052e16);
+    color: #fff;
+    text-align: center;
+  }
+  .final-cta h2 { font-size: clamp(24px, 4.5vw, 36px); font-weight: 900; margin-bottom: 16px; }
+  .final-cta p { opacity: .9; margin-bottom: 32px; font-size: 15px; }
+  .countdown-note {
+    display: inline-block;
+    background: rgba(245,158,11,.2);
+    border: 1px solid var(--c-accent);
+    color: #fde68a;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  footer {
+    background: #052e16;
+    color: rgba(255,255,255,.6);
+    text-align: center;
+    font-size: 12px;
+    padding: 28px 20px;
+  }
+  footer .sample-note { color: #fde68a; font-weight: 700; margin-bottom: 6px; }
+
+  /* ===== 追従CTA(モバイル) ===== */
+  .sticky-cta {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 -4px 20px rgba(0,0,0,.12);
+    padding: 10px 16px;
+    text-align: center;
+    z-index: 100;
+    transform: translateY(110%);
+    transition: transform .3s;
+  }
+  .sticky-cta.show { transform: translateY(0); }
+  .sticky-cta .btn-cta { padding: 12px 40px; font-size: 15px; }
+
+  @media (max-width: 600px) {
+    section { padding: 56px 0; }
+    .hero { padding: 72px 0 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="inner">
+    <span class="badge">完全オンライン × 専属トレーナー</span>
+    <h1>ジムに通わず、<br>3ヶ月で<span class="marker">人生最高の身体</span>へ。</h1>
+    <p class="sub">スマホ1つで始められるオンラインパーソナルジム「FITLY」。<br>食事指導からトレーニングまで、専属トレーナーが毎日あなたに伴走します。</p>
+    <div class="stats">
+      <div class="stat"><b>96.4%</b><span>3ヶ月継続率</span></div>
+      <div class="stat"><b>-6.8kg</b><span>平均減量実績</span></div>
+      <div class="stat"><b>4.9<small>/5.0</small></b><span>利用者満足度</span></div>
+    </div>
+    <a class="btn-cta" href="#price">今すぐ無料カウンセリングを予約<small>※今なら初月50%OFF</small></a>
+  </div>
+</header>
+
+<!-- ============ 悩み共感 ============ -->
+<section class="worries">
+  <div class="inner">
+    <h2 class="sec-title">こんな<span>お悩み</span>ありませんか?</h2>
+    <p class="sec-lead">1つでも当てはまったら、FITLYが力になれます。</p>
+    <div class="worry-list">
+      <div class="worry">ジムに入会したけど、3ヶ月で行かなくなった</div>
+      <div class="worry">食事制限が続かず、リバウンドを繰り返している</div>
+      <div class="worry">仕事が忙しくて、ジムに通う時間がない</div>
+      <div class="worry">何から始めればいいのか、正解がわからない</div>
+    </div>
+    <div class="arrow">その悩み、すべて「仕組み」で解決できます</div>
+  </div>
+</section>
+
+<!-- ============ 特長 ============ -->
+<section>
+  <div class="inner">
+    <h2 class="sec-title">FITLYが<span>選ばれる3つの理由</span></h2>
+    <p class="sec-lead">「続かない」を徹底的に潰した、伴走型オンラインジムです。</p>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="num">REASON 01</div>
+        <div class="icon">📱</div>
+        <h3>LINEで毎日<br>専属トレーナーが伴走</h3>
+        <p>毎日の食事写真を送るだけで、管理栄養士監修のフィードバックが届きます。「ひとりじゃない」から続く。返信は平均15分以内。</p>
+      </div>
+      <div class="feature">
+        <div class="num">REASON 02</div>
+        <div class="icon">🏠</div>
+        <h3>器具なし1日20分<br>自宅トレーニング</h3>
+        <p>あなたの体力レベルに合わせた完全個別メニュー。動画を見ながら自宅で20分。ジムへの移動時間はゼロです。</p>
+      </div>
+      <div class="feature">
+        <div class="num">REASON 03</div>
+        <div class="icon">💰</div>
+        <h3>パーソナルジムの<br>約1/3の料金</h3>
+        <p>店舗を持たないオンライン特化だから、通常20万円以上かかるパーソナル指導が月額9,800円から。全額返金保証付き。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ お客様の声 ============ -->
+<section class="voices">
+  <div class="inner">
+    <h2 class="sec-title">利用者の<span>リアルな声</span></h2>
+    <p class="sec-lead">※掲載の体験談はサンプル用の架空のものです。</p>
+    <div class="voice-grid">
+      <div class="voice">
+        <div class="stars">★★★★★</div>
+        <div class="meta">
+          <div class="avatar">M</div>
+          <div><b>M.Kさん(34歳・会社員)</b><span>利用歴4ヶ月</span></div>
+        </div>
+        <span class="result">体重 -8.2kg</span>
+        <p>ジム通いは何度も挫折しましたが、FITLYは「サボれない仕組み」がすごい。毎日トレーナーさんから連絡が来るので、自然と習慣になりました。</p>
+      </div>
+      <div class="voice">
+        <div class="stars">★★★★★</div>
+        <div class="meta">
+          <div class="avatar">Y</div>
+          <div><b>Y.Sさん(28歳・看護師)</b><span>利用歴3ヶ月</span></div>
+        </div>
+        <span class="result">体脂肪率 -5.1%</span>
+        <p>夜勤続きの不規則な生活でも、私のシフトに合わせてメニューを組んでくれました。食事指導のおかげでコンビニ食でも痩せられると知って衝撃でした。</p>
+      </div>
+      <div class="voice">
+        <div class="stars">★★★★☆</div>
+        <div class="meta">
+          <div class="avatar">T</div>
+          <div><b>T.Nさん(41歳・自営業)</b><span>利用歴6ヶ月</span></div>
+        </div>
+        <span class="result">ウエスト -9cm</span>
+        <p>40代からでも変われるのか半信半疑でしたが、3ヶ月で周りから「痩せた?」と言われるように。1日20分なら仕事の合間にできます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 料金 ============ -->
+<section id="price">
+  <div class="inner">
+    <h2 class="sec-title"><span>料金プラン</span></h2>
+    <p class="sec-lead">入会金0円。いつでも解約できます。</p>
+    <div class="price-card">
+      <div class="head">スタンダードプラン(3ヶ月集中)</div>
+      <div class="body">
+        <div class="old">通常 月額 19,600円</div>
+        <div class="now">9,800<small>円/月(税込)</small></div>
+        <span class="off-badge">先着30名限定 初月50%OFF</span>
+        <ul>
+          <li>専属トレーナーによるLINE食事指導(毎日)</li>
+          <li>完全個別の自宅トレーニングメニュー</li>
+          <li>月2回のオンラインカウンセリング(30分)</li>
+          <li>管理栄養士監修レシピ100種類見放題</li>
+          <li>入会金 0円・解約金 0円</li>
+        </ul>
+      </div>
+    </div>
+    <div class="guarantee">
+      🛡 <b>30日間 全額返金保証</b><br>
+      プログラムにご満足いただけなければ、理由を問わず全額返金いたします。
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section style="background: var(--c-bg-gray);">
+  <div class="inner">
+    <h2 class="sec-title">よくある<span>ご質問</span></h2>
+    <p class="sec-lead">不安はここで解消してください。</p>
+    <details class="faq-item">
+      <summary>運動が全くの初心者でも大丈夫ですか?</summary>
+      <div class="answer">はい、利用者の約7割は運動初心者です。体力テストの結果をもとに、無理のないレベルからメニューを組みますのでご安心ください。</div>
+    </details>
+    <details class="faq-item">
+      <summary>器具やマットは必要ですか?</summary>
+      <div class="answer">基本メニューは器具不要です。畳1枚分のスペースがあれば今日から始められます。慣れてきた方には市販のチューブ等を使った発展メニューもご用意しています。</div>
+    </details>
+    <details class="faq-item">
+      <summary>食事制限は厳しいですか?お酒は飲めますか?</summary>
+      <div class="answer">極端な制限は行いません。「何を減らすか」ではなく「何を選ぶか」の指導なので、外食やお酒とも付き合いながら続けられます。</div>
+    </details>
+    <details class="faq-item">
+      <summary>途中で解約できますか?</summary>
+      <div class="answer">はい、いつでも解約可能です。解約金は一切かかりません。また、開始30日以内であれば全額返金保証の対象です。</div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ 最終CTA ============ -->
+<section class="final-cta" id="cta">
+  <div class="inner">
+    <h2>3ヶ月後、鏡を見るのが<br>楽しみになる毎日へ。</h2>
+    <p>まずは無料カウンセリング(30分)で、あなた専用のプランを確認してください。<br>無理な勧誘は一切ありません。</p>
+    <div class="countdown-note">⏰ 初月50%OFFキャンペーンは先着30名で終了します</div>
+    <br>
+    <a class="btn-cta" href="#" onclick="alert('サンプルLPのため、フォームはダミーです。'); return false;">無料カウンセリングを予約する<small>所要1分・スマホで完結</small></a>
+  </div>
+</section>
+
+<footer>
+  <div class="sample-note">※このページはポートフォリオ用のサンプルLPです。「FITLY」は架空のサービスであり、実在の団体・料金・実績とは関係ありません。</div>
+  <div>© 2026 FITLY (Sample LP) — Produced by AI_STREAM_COMPANY / PRODUCT_TEAM</div>
+</footer>
+
+<!-- 追従CTA -->
+<div class="sticky-cta" id="stickyCta">
+  <a class="btn-cta" href="#price">初月50%OFFで始める</a>
+</div>
+
+<script>
+  // ヒーローを過ぎたら追従CTAを表示、最終CTA付近では隠す
+  const sticky = document.getElementById('stickyCta');
+  const hero = document.querySelector('.hero');
+  const finalCta = document.getElementById('cta');
+  window.addEventListener('scroll', () => {
+    const past = window.scrollY > hero.offsetHeight;
+    const nearEnd = finalCta.getBoundingClientRect().top < window.innerHeight;
+    sticky.classList.toggle('show', past && !nearEnd);
+  }, { passive: true });
+</script>
+
+</body>
+</html>

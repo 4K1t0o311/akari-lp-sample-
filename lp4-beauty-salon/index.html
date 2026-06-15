@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumière（リュミエール） | 大人のためのプライベート美容サロン【サンプルLP】</title>
+<meta name="description" content="完全予約制のプライベート美容サロン Lumière。フェイシャル・ボディ・脱毛をオーダーメイドで。駅徒歩3分・初回限定特典あり。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lumière（リュミエール）プライベート美容サロン">
+<meta property="og:description" content="完全予約制。あなただけの美容時間を。フェイシャル・ボディ・脱毛をオーダーメイドで。">
+<meta property="og:locale" content="ja_JP">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   Lumière — Private Beauty Salon LP
+   - BEM命名 / :root デザイントークン一元管理
+   - モバイルファースト・セマンティックHTML・軽微JSのみ
+   ========================================================= */
+:root {
+  --c-base:    #fdf9f6; --c-base-2:  #f5ebe5;
+  --c-rose:    #cf9d97; --c-rose-d:  #b67f78;
+  --c-gold:    #b59a6b; --c-ink:     #4d4039; --c-sub: #9b8d84; --c-line: #e7d9d0;
+  --font-serif: "Noto Serif JP", serif; --font-sans: "Noto Sans JP", sans-serif; --font-en: "Cormorant Garamond", serif;
+  --maxw: 1040px; --gutter: clamp(20px, 5vw, 48px); --section-py: clamp(64px, 9vw, 116px); --radius: 14px; --header-h: 66px;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-sans); color: var(--c-ink); background: var(--c-base); line-height: 1.9; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+.l-container { max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.c-head { text-align: center; margin-bottom: clamp(40px, 6vw, 60px); }
+.c-head__en { font-family: var(--font-en); font-style: italic; font-size: clamp(28px, 5vw, 44px); color: var(--c-rose); line-height: 1; }
+.c-head__ja { font-family: var(--font-serif); font-weight: 600; font-size: clamp(19px, 2.8vw, 24px); letter-spacing: .12em; margin-top: 10px; }
+.c-head__lead { color: var(--c-sub); font-size: 14px; margin-top: 16px; }
+.c-btn { display: inline-flex; align-items: center; justify-content: center; gap: .6em; font-family: var(--font-serif); font-weight: 500; letter-spacing: .14em; padding: 16px 44px; border-radius: 999px; background: var(--c-rose); color: #fff; border: 1px solid var(--c-rose); transition: background .25s, transform .25s; box-shadow: 0 10px 26px rgba(207,157,151,.35); }
+.c-btn:hover { background: var(--c-rose-d); transform: translateY(-2px); }
+.c-btn--ghost { background: transparent; color: var(--c-rose-d); box-shadow: none; }
+.c-btn--ghost:hover { background: rgba(207,157,151,.1); }
+.c-btn small { display: block; font-family: var(--font-sans); font-size: 11px; font-weight: 400; }
+.c-photo { position: relative; background-color: var(--c-base-2); background-image: radial-gradient(circle at 30% 30%, rgba(181,154,107,.12), transparent 60%), radial-gradient(circle at 75% 70%, rgba(207,157,151,.14), transparent 55%); border: 1px solid var(--c-line); border-radius: var(--radius); overflow: hidden; }
+.c-photo::after { content: attr(data-label); position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--font-serif); font-size: 12px; letter-spacing: .2em; color: rgba(155,141,132,.75); }
+.c-photo--43 { aspect-ratio: 4/3; } .c-photo--34 { aspect-ratio: 3/4; } .c-photo--11 { aspect-ratio: 1/1; } .c-photo--169 { aspect-ratio: 16/9; }
+.js-reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+.js-reveal.is-shown { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce){ .js-reveal{opacity:1;transform:none;transition:none} html{scroll-behavior:auto} }
+.header { position: fixed; inset: 0 0 auto 0; height: var(--header-h); display: flex; align-items: center; z-index: 50; transition: background .3s, box-shadow .3s; }
+.header.is-scrolled { background: rgba(253,249,246,.92); box-shadow: 0 2px 18px rgba(77,64,57,.08); backdrop-filter: blur(6px); }
+.header__inner { width:100%; max-width: var(--maxw); margin-inline:auto; padding-inline: var(--gutter); display:flex; align-items:center; justify-content:space-between; }
+.header__logo { font-family: var(--font-en); font-size: 26px; color: var(--c-ink); }
+.header__logo span { font-family: var(--font-sans); font-size: 10px; letter-spacing: .3em; color: var(--c-gold); display:block; margin-top:-4px; }
+.header__nav { display:none; }
+.header__menu { display:flex; gap: 26px; align-items:center; }
+.header__link { font-size: 13px; letter-spacing: .1em; color: var(--c-ink); }
+.header__link:hover { color: var(--c-rose-d); }
+.header__cta { padding: 9px 22px; font-size: 12px; }
+.header__toggle { display:inline-flex; flex-direction:column; gap:6px; width:30px; background:none; border:0; cursor:pointer; padding:4px; }
+.header__toggle span { height:2px; background: var(--c-ink); transition: transform .3s, opacity .3s; }
+.header__toggle[aria-expanded="true"] span:nth-child(1){ transform: translateY(8px) rotate(45deg);}
+.header__toggle[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+.header__toggle[aria-expanded="true"] span:nth-child(3){ transform: translateY(-8px) rotate(-45deg);}
+.drawer { position: fixed; inset:0; background: rgba(253,249,246,.98); display:grid; place-content:center; gap:6px; text-align:center; transform: translateX(100%); transition: transform .35s ease; z-index:40; }
+.drawer.is-open { transform:none; }
+.drawer__link { font-family: var(--font-serif); font-size: 20px; letter-spacing:.14em; padding:14px; color: var(--c-ink); }
+.drawer__link span { display:block; font-family: var(--font-en); font-style:italic; font-size:13px; color: var(--c-rose); }
+.hero { min-height: 100svh; display:grid; align-items:center; position:relative; background: linear-gradient(120deg, #fdf9f6 0%, #f7ece6 55%, #f0ded6 100%); overflow:hidden; }
+.hero::before { content:""; position:absolute; right:-10%; top:-10%; width:60%; height:70%; background: radial-gradient(circle, rgba(207,157,151,.22), transparent 65%); }
+.hero__inner { max-width: var(--maxw); margin-inline:auto; padding: 96px var(--gutter) 60px; width:100%; position:relative; }
+.hero__en { font-family: var(--font-en); font-style: italic; font-size: clamp(18px,3vw,24px); color: var(--c-rose-d); margin-bottom:14px; }
+.hero__title { font-family: var(--font-serif); font-weight:600; font-size: clamp(28px,6vw,50px); line-height:1.5; letter-spacing:.06em; margin-bottom:24px; }
+.hero__title .mark { color: var(--c-rose-d); }
+.hero__desc { font-size: clamp(13px,2.4vw,16px); color: var(--c-ink); max-width: 26em; margin-bottom: 36px; }
+.hero__actions { display:flex; gap:14px; flex-wrap:wrap; }
+.hero__note { margin-top: 20px; font-size: 12px; color: var(--c-sub); }
+.worry { padding-block: var(--section-py); background: var(--c-base-2); }
+.worry__list { display:grid; gap:14px; grid-template-columns: 1fr; max-width: 720px; margin-inline:auto; }
+.worry__item { background:#fff; border-radius: var(--radius); padding: 18px 24px; font-family: var(--font-serif); font-size: 15px; display:flex; gap:14px; align-items:center; box-shadow: 0 6px 18px rgba(77,64,57,.05); }
+.worry__item::before { content:"♡"; color: var(--c-rose); flex-shrink:0; }
+.worry__bridge { text-align:center; margin-top: 36px; font-family: var(--font-serif); font-size: clamp(16px,3vw,22px); font-weight:600; }
+.worry__bridge .mark { color: var(--c-rose-d); }
+.reason { padding-block: var(--section-py); }
+.reason__grid { display:grid; gap: clamp(24px,4vw,40px); grid-template-columns:1fr; }
+.reason__card { text-align:center; }
+.reason__no { font-family: var(--font-en); font-style:italic; font-size: 30px; color: var(--c-gold); }
+.reason__photo { margin: 10px 0 20px; }
+.reason__title { font-family: var(--font-serif); font-size: 19px; font-weight:600; margin-bottom:12px; }
+.reason__text { color: var(--c-sub); font-size: 14px; text-align:left; }
+.menu { padding-block: var(--section-py); background: var(--c-base-2); }
+.menu__list { display:grid; gap: 18px; grid-template-columns:1fr; max-width: 760px; margin-inline:auto; }
+.menu__item { background:#fff; border-radius: var(--radius); padding: 22px 26px; display:flex; justify-content:space-between; align-items:flex-start; gap: 16px; box-shadow: 0 6px 18px rgba(77,64,57,.05); }
+.menu__name { font-family: var(--font-serif); font-size: 17px; font-weight:600; }
+.menu__desc { font-size: 13px; color: var(--c-sub); margin-top: 4px; }
+.menu__price { font-family: var(--font-en); font-size: 22px; color: var(--c-rose-d); white-space:nowrap; }
+.menu__price small { font-family: var(--font-sans); font-size: 11px; color: var(--c-sub); }
+.menu__note { text-align:center; margin-top: 26px; font-size: 12px; color: var(--c-sub); }
+.flow { padding-block: var(--section-py); }
+.flow__steps { display:grid; gap:18px; grid-template-columns:1fr; counter-reset: step; max-width: 800px; margin-inline:auto; }
+.flow__step { display:flex; gap: 20px; align-items:flex-start; counter-increment: step; }
+.flow__step::before { content:"0" counter(step); font-family: var(--font-en); font-style:italic; font-size: 28px; color: var(--c-rose); flex-shrink:0; width: 1.6em; }
+.flow__step h4 { font-family: var(--font-serif); font-size: 16px; font-weight:600; margin-bottom: 4px; }
+.flow__step p { font-size: 13.5px; color: var(--c-sub); }
+.voice { padding-block: var(--section-py); background: var(--c-base-2); }
+.voice__grid { display:grid; gap:22px; grid-template-columns:1fr; }
+.voice__card { background:#fff; border-radius: var(--radius); padding: 26px; box-shadow: 0 6px 18px rgba(77,64,57,.05); }
+.voice__stars { color: var(--c-gold); letter-spacing: 2px; margin-bottom: 10px; }
+.voice__text { font-size: 14px; margin-bottom: 14px; }
+.voice__author { font-size: 12px; color: var(--c-sub); font-family: var(--font-serif); }
+.gallery { padding-block: var(--section-py); }
+.gallery__grid { display:grid; gap: 12px; grid-template-columns: repeat(2,1fr); }
+.gallery__item--wide { grid-column: span 2; }
+.staff { padding-block: var(--section-py); background: var(--c-base-2); }
+.staff__grid { display:grid; gap: clamp(24px,5vw,48px); grid-template-columns:1fr; align-items:center; }
+.staff__role { font-family: var(--font-en); font-style:italic; color: var(--c-rose-d); font-size: 18px; }
+.staff__name { font-family: var(--font-serif); font-size: clamp(20px,3vw,26px); font-weight:600; margin: 6px 0 16px; }
+.staff__name small { font-size: 13px; color: var(--c-sub); margin-left: 8px; }
+.staff__text { color: var(--c-sub); font-size: 14.5px; }
+.cp { padding-block: var(--section-py); text-align:center; background: linear-gradient(135deg, var(--c-rose) 0%, #d8a9a2 60%, var(--c-gold) 130%); color:#fff; }
+.cp__en { font-family: var(--font-en); font-style:italic; font-size: clamp(26px,5vw,40px); }
+.cp__title { font-family: var(--font-serif); font-size: clamp(20px,3.4vw,28px); font-weight:600; margin: 8px 0 18px; }
+.cp__price { font-family: var(--font-en); font-size: clamp(40px,9vw,64px); line-height:1.1; }
+.cp__price small { font-family: var(--font-sans); font-size:16px; }
+.cp__old { text-decoration: line-through; opacity:.8; font-size: 16px; margin-bottom: 6px; }
+.cp__note { font-size: 13px; opacity:.9; margin-top: 14px; }
+.faq { padding-block: var(--section-py); }
+.faq__list { max-width: 740px; margin-inline:auto; }
+.faq__item { border-bottom: 1px solid var(--c-line); }
+.faq__q { width:100%; text-align:left; background:none; border:0; cursor:pointer; font-family: var(--font-serif); font-weight:600; font-size: 15px; padding: 20px 44px 20px 34px; position:relative; color: var(--c-ink); }
+.faq__q::before { content:"Q"; position:absolute; left:4px; font-family: var(--font-en); font-style:italic; color: var(--c-rose); }
+.faq__q::after { content:"＋"; position:absolute; right:8px; top:50%; transform:translateY(-50%); color: var(--c-rose); transition: transform .3s; }
+.faq__item.is-open .faq__q::after { content:"−"; }
+.faq__a { max-height:0; overflow:hidden; transition: max-height .35s ease; }
+.faq__a-inner { padding: 0 34px 20px; color: var(--c-sub); font-size: 14px; }
+.access { padding-block: var(--section-py); background: var(--c-base-2); }
+.access__grid { display:grid; gap: clamp(24px,5vw,44px); grid-template-columns:1fr; }
+.access__table { width:100%; border-collapse:collapse; font-size: 14px; }
+.access__table th,.access__table td { text-align:left; padding: 13px 4px; border-bottom: 1px solid var(--c-line); vertical-align: top; }
+.access__table th { font-family: var(--font-serif); width: 6.5em; white-space:nowrap; }
+.reserve { padding-block: var(--section-py); text-align:center; background: linear-gradient(180deg, #fdf9f6, #f7ece6); }
+.reserve__title { font-family: var(--font-serif); font-size: clamp(22px,4vw,32px); font-weight:600; margin-bottom: 14px; }
+.reserve__text { color: var(--c-sub); margin-bottom: 12px; }
+.reserve__tel { font-family: var(--font-en); font-size: clamp(28px,5vw,40px); color: var(--c-rose-d); margin: 14px 0 4px; }
+.reserve__hours { font-size: 12px; color: var(--c-sub); margin-bottom: 30px; }
+.reserve__actions { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.footer { background: #efe2da; color: var(--c-sub); text-align:center; padding: 50px var(--gutter) 30px; }
+.footer__logo { font-family: var(--font-en); font-size: 28px; color: var(--c-ink); }
+.footer__sns { display:flex; gap: 20px; justify-content:center; margin: 22px 0; font-family: var(--font-serif); font-size: 13px; }
+.footer__sns a:hover { color: var(--c-rose-d); }
+.footer__sample { color: var(--c-rose-d); font-size: 12px; margin-bottom: 8px; }
+.footer__note { font-size: 11px; opacity: .8; }
+.sticky { position: fixed; inset:auto 0 0 0; z-index:45; display:flex; background: rgba(255,255,255,.96); box-shadow: 0 -4px 20px rgba(77,64,57,.12); transform: translateY(110%); transition: transform .3s; }
+.sticky.is-shown { transform:none; }
+.sticky__btn { flex:1; text-align:center; padding: 13px; font-family: var(--font-serif); font-size: 14px; color: var(--c-ink); }
+.sticky__btn--main { background: var(--c-rose); color:#fff; }
+@media (min-width: 768px){
+  .header__nav{ display:block; } .header__toggle{ display:none; }
+  .worry__list{ grid-template-columns: 1fr 1fr; }
+  .reason__grid{ grid-template-columns: repeat(3,1fr); }
+  .voice__grid{ grid-template-columns: repeat(3,1fr); }
+  .gallery__grid{ grid-template-columns: repeat(4,1fr); }
+  .gallery__item--wide{ grid-column: span 2; }
+  .staff__grid{ grid-template-columns: .8fr 1.2fr; }
+  .access__grid{ grid-template-columns: 1fr 1fr; }
+  .sticky{ display:none; }
+}
+</style>
+</head>
+<body>
+<header class="header" id="header">
+  <div class="header__inner">
+    <a href="#hero" class="header__logo">Lumière<span>BEAUTY SALON</span></a>
+    <nav class="header__nav" aria-label="グローバルナビ">
+      <ul class="header__menu">
+        <li><a href="#reason" class="header__link">特徴</a></li>
+        <li><a href="#menu" class="header__link">メニュー</a></li>
+        <li><a href="#voice" class="header__link">お客様の声</a></li>
+        <li><a href="#access" class="header__link">アクセス</a></li>
+        <li><a href="#reserve" class="c-btn header__cta">ご予約</a></li>
+      </ul>
+    </nav>
+    <button class="header__toggle" id="navToggle" aria-expanded="false" aria-controls="drawer" aria-label="メニューを開く"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="drawer" id="drawer" aria-label="モバイルナビ">
+  <a href="#reason" class="drawer__link js-drawer-link">特徴<span>Features</span></a>
+  <a href="#menu" class="drawer__link js-drawer-link">メニュー<span>Menu</span></a>
+  <a href="#voice" class="drawer__link js-drawer-link">お客様の声<span>Voice</span></a>
+  <a href="#access" class="drawer__link js-drawer-link">アクセス<span>Access</span></a>
+  <a href="#reserve" class="drawer__link js-drawer-link">ご予約<span>Reserve</span></a>
+</nav>
+<main>
+  <section class="hero" id="hero">
+    <div class="hero__inner">
+      <p class="hero__en js-reveal">Your private beauty time</p>
+      <h1 class="hero__title js-reveal">頑張る毎日に、<br><span class="mark">わたしを整える</span>時間を。</h1>
+      <p class="hero__desc js-reveal">完全予約制のプライベートサロン Lumière。お一人おひとりの肌とお悩みに合わせた、オーダーメイドの美容ケアをご提供します。</p>
+      <div class="hero__actions js-reveal">
+        <a href="#reserve" class="c-btn">初回限定で予約する<small>※ネット予約24時間OK</small></a>
+        <a href="#menu" class="c-btn c-btn--ghost">メニューを見る</a>
+      </div>
+      <p class="hero__note js-reveal">○○線「○○駅」徒歩3分 ／ 完全個室 ／ 女性専用</p>
+    </div>
+  </section>
+  <section class="worry">
+    <div class="l-container">
+      <div class="c-head js-reveal"><span class="c-head__en">Worries</span><h2 class="c-head__ja">こんなお悩み、ありませんか？</h2></div>
+      <ul class="worry__list">
+        <li class="worry__item js-reveal">乾燥・くすみで、肌の調子が安定しない</li>
+        <li class="worry__item js-reveal">エステに通いたいけど、勧誘がこわい</li>
+        <li class="worry__item js-reveal">自分に合うケアが分からないまま年齢を重ねている</li>
+        <li class="worry__item js-reveal">忙しくて、自分をいたわる時間がとれない</li>
+      </ul>
+      <p class="worry__bridge js-reveal">そのお悩み、<span class="mark">Lumière</span>がやさしく整えます。</p>
+    </div>
+  </section>
+  <section class="reason" id="reason">
+    <div class="l-container">
+      <div class="c-head js-reveal"><span class="c-head__en">Our Features</span><h2 class="c-head__ja">選ばれる3つの理由</h2></div>
+      <div class="reason__grid">
+        <article class="reason__card js-reveal"><div class="reason__no">01</div><div class="c-photo c-photo--43 reason__photo" data-label="カウンセリング"></div><h3 class="reason__title">完全オーダーメイド施術</h3><p class="reason__text">毎回のカウンセリングで肌状態を確認し、その日のコンディションに合わせて施術内容を調整。あなただけのケアプランをご提案します。</p></article>
+        <article class="reason__card js-reveal"><div class="reason__no">02</div><div class="c-photo c-photo--43 reason__photo" data-label="完全個室"></div><h3 class="reason__title">完全個室・無理な勧誘なし</h3><p class="reason__text">プライベートが守られた完全個室。回数券の押し売りや無理な勧誘は一切いたしません。安心してお過ごしください。</p></article>
+        <article class="reason__card js-reveal"><div class="reason__no">03</div><div class="c-photo c-photo--43 reason__photo" data-label="施術風景"></div><h3 class="reason__title">経験豊富な女性セラピスト</h3><p class="reason__text">確かな技術を持つ女性セラピストが、最初から最後まで担当。リラックスできる空間で、心からの癒やしをお届けします。</p></article>
+      </div>
+    </div>
+  </section>
+  <section class="menu" id="menu">
+    <div class="l-container">
+      <div class="c-head js-reveal"><span class="c-head__en">Menu</span><h2 class="c-head__ja">施術メニュー</h2><p class="c-head__lead">すべて税込・カウンセリング込み。初回の方は下記の特典をご利用ください。</p></div>
+      <div class="menu__list">
+        <div class="menu__item js-reveal"><div><p class="menu__name">フェイシャル（ベーシック）</p><p class="menu__desc">クレンジング〜保湿まで／60分</p></div><p class="menu__price">8,800<small>円</small></p></div>
+        <div class="menu__item js-reveal"><div><p class="menu__name">フェイシャル（プレミアム）</p><p class="menu__desc">美容機器＋ハンドケア／90分</p></div><p class="menu__price">13,200<small>円</small></p></div>
+        <div class="menu__item js-reveal"><div><p class="menu__name">ボディトリートメント</p><p class="menu__desc">むくみ・疲れをほぐす／60分</p></div><p class="menu__price">9,900<small>円</small></p></div>
+        <div class="menu__item js-reveal"><div><p class="menu__name">脱毛（顔・VIO除く全身）</p><p class="menu__desc">痛みの少ない光脱毛／1回</p></div><p class="menu__price">14,300<small>円</small></p></div>
+      </div>
+      <p class="menu__note">※ お得な回数チケットもご用意しています。詳しくはカウンセリング時にご案内します。</p>
+    </div>
+  </section>
+  <section class="flow">
+    <div class="l-container">
+      <div class="c-head js-reveal"><span class="c-head__en">Flow</span><h2 class="c-head__ja">ご来店の流れ</h2></div>
+      <div class="flow__steps">
+        <div class="flow__step js-reveal"><div><h4>ご予約</h4><p>ネット予約またはお電話で。ご希望の日時とメニューをお選びください。</p></div></div>
+        <div class="flow__step js-reveal"><div><h4>カウンセリング</h4><p>お肌の状態やお悩み、なりたいイメージをじっくりお伺いします。</p></div></div>
+        <div class="flow__step js-reveal"><div><h4>施術</h4><p>完全個室で、あなたに合わせたオーダーメイドの施術を行います。</p></div></div>
+        <div class="flow__step js-reveal"><div><h4>アフターケア</h4><p>ご自宅でのケア方法をアドバイス。次回のご提案も無理なく。</p></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="voice" id="voice">
+    <div class="l-container">
+      <div class="c-head js-reveal"><span class="c-head__en">Voice</span><h2 class="c-head__ja">お客様の声</h2><p class="c-head__lead">※掲載の口コミはサンプル用の架空のものです。</p></div>
+      <div class="voice__grid">
+        <article class="voice__card js-reveal"><p class="voice__stars">★★★★★</p><p class="voice__text">勧誘が苦手で避けていたのですが、Lumièreは本当に何もなくて。施術も丁寧で、肌の調子がすごく良くなりました。</p><p class="voice__author">― 30代・会社員</p></article>
+        <article class="voice__card js-reveal"><p class="voice__stars">★★★★★</p><p class="voice__text">完全個室で、自分だけの時間を過ごせるのが贅沢。毎月のごほうびになっています。担当さんとの会話も楽しい。</p><p class="voice__author">― 40代・主婦</p></article>
+        <article class="voice__card js-reveal"><p class="voice__stars">★★★★☆</p><p class="voice__text">カウンセリングが丁寧で、その日の肌に合わせてくれるのが嬉しい。乾燥が気にならなくなってきました。</p><p class="voice__author">― 20代・看護師</p></article>
+      </div>
+    </div>
+  </section>
+  <section class="gallery">
+    <div class="l-container">
+      <div class="c-head js-reveal"><span class="c-head__en">Salon</span><h2 class="c-head__ja">サロンの空間</h2></div>
+      <div class="gallery__grid js-reveal">
+        <div class="c-photo c-photo--169 gallery__item gallery__item--wide" data-label="エントランス"></div>
+        <div class="c-photo c-photo--11 gallery__item" data-label="施術ルーム"></div>
+        <div class="c-photo c-photo--11 gallery__item" data-label="パウダールーム"></div>
+        <div class="c-photo c-photo--11 gallery__item" data-label="待合スペース"></div>
+        <div class="c-photo c-photo--11 gallery__item" data-label="化粧品"></div>
+        <div class="c-photo c-photo--169 gallery__item gallery__item--wide" data-label="個室の様子"></div>
+      </div>
+    </div>
+  </section>
+  <section class="staff">
+    <div class="l-container">
+      <div class="staff__grid">
+        <div class="js-reveal"><div class="c-photo c-photo--34" data-label="オーナーの写真"></div></div>
+        <div class="js-reveal">
+          <p class="staff__role">Owner / Therapist</p>
+          <h2 class="staff__name">佐藤 美咲 <small>さとう みさき</small></h2>
+          <p class="staff__text">エステティシャン歴12年。大手サロンを経て、「一人ひとりとじっくり向き合えるサロンを」という想いでLumièreを開業しました。</p>
+          <p class="staff__text" style="margin-top:14px">お客様にとって、ただ綺麗になるだけでなく、心からほっとできる場所でありたい。そんな願いを込めて、毎回の施術に向き合っています。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="cp">
+    <div class="l-container">
+      <p class="cp__en js-reveal">First Visit</p>
+      <h2 class="cp__title js-reveal">初回限定キャンペーン</h2>
+      <p class="cp__old js-reveal">通常 8,800円</p>
+      <p class="cp__price js-reveal">3,980<small>円（税込）</small></p>
+      <p class="cp__note js-reveal">※フェイシャル（ベーシック）初回限定。お一人様1回まで。先着20名様。</p>
+    </div>
+  </section>
+  <section class="faq">
+    <div class="l-container">
+      <div class="c-head js-reveal"><span class="c-head__en">FAQ</span><h2 class="c-head__ja">よくあるご質問</h2></div>
+      <div class="faq__list js-reveal">
+        <div class="faq__item"><button type="button" class="faq__q">本当に勧誘はないですか？</button><div class="faq__a"><div class="faq__a-inner">はい。回数券や化粧品の無理な勧誘は一切いたしません。お客様が必要だと感じた時だけ、ご相談ください。</div></div></div>
+        <div class="faq__item"><button type="button" class="faq__q">敏感肌でも受けられますか？</button><div class="faq__a"><div class="faq__a-inner">カウンセリングで肌状態を確認し、刺激の少ないメニュー・製品をご提案します。心配な方はパッチテストも可能です。</div></div></div>
+        <div class="faq__item"><button type="button" class="faq__q">予約のキャンセルはできますか？</button><div class="faq__a"><div class="faq__a-inner">前日までのご連絡で無料キャンセル可能です。当日キャンセルはキャンセル料が発生する場合があります。</div></div></div>
+        <div class="faq__item"><button type="button" class="faq__q">支払い方法は何がありますか？</button><div class="faq__a"><div class="faq__a-inner">現金・各種クレジットカード・電子マネー・QRコード決済に対応しています。</div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="access" id="access">
+    <div class="l-container">
+      <div class="c-head js-reveal"><span class="c-head__en">Access</span><h2 class="c-head__ja">アクセス・店舗情報</h2></div>
+      <div class="access__grid">
+        <div class="js-reveal">
+          <table class="access__table"><tbody>
+            <tr><th>店名</th><td>Lumière（リュミエール）</td></tr>
+            <tr><th>住所</th><td>〒000-0000 ○○県○○市○○ 1-2-3 ○○ビル 4F</td></tr>
+            <tr><th>電話</th><td>0000-00-0000</td></tr>
+            <tr><th>営業時間</th><td>10:00 – 20:00（最終受付 19:00）</td></tr>
+            <tr><th>定休日</th><td>火曜・第3水曜</td></tr>
+            <tr><th>アクセス</th><td>○○線「○○駅」徒歩3分</td></tr>
+          </tbody></table>
+        </div>
+        <div class="js-reveal"><div class="c-photo c-photo--43" data-label="地図（Googleマップ埋め込み予定）"></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="reserve" id="reserve">
+    <div class="l-container">
+      <h2 class="reserve__title js-reveal">ご予約・お問い合わせ</h2>
+      <p class="reserve__text js-reveal">ネット予約は24時間受付中。お電話でもお気軽にどうぞ。</p>
+      <p class="reserve__tel js-reveal">0000-00-0000</p>
+      <p class="reserve__hours js-reveal">受付 10:00 – 19:00 / 定休日 火曜・第3水曜</p>
+      <div class="reserve__actions js-reveal">
+        <a href="#" class="c-btn" onclick="alert('サンプルLPのため、予約フォームはダミーです。'); return false;">ネット予約する</a>
+        <a href="#" class="c-btn c-btn--ghost" onclick="alert('サンプルLPのため、リンクはダミーです。'); return false;">LINEで相談</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <p class="footer__logo">Lumière</p>
+  <nav class="footer__sns" aria-label="SNS">
+    <a href="#" onclick="return false;">Instagram</a>
+    <a href="#" onclick="return false;">LINE</a>
+    <a href="#" onclick="return false;">ホットペッパー</a>
+  </nav>
+  <p class="footer__sample">※このページはポートフォリオ用のサンプルLPです。「Lumière」は架空のサロンです。</p>
+  <p class="footer__note">© 2026 Lumière (Sample LP) — Produced by AI_STREAM_COMPANY / PRODUCT_TEAM</p>
+</footer>
+<div class="sticky" id="sticky">
+  <a href="tel:0000000000" class="sticky__btn" onclick="return false;">電話する</a>
+  <a href="#reserve" class="sticky__btn sticky__btn--main">ネット予約</a>
+</div>
+<script>
+(function(){
+  'use strict';
+  var header=document.getElementById('header'), toggle=document.getElementById('navToggle'),
+      drawer=document.getElementById('drawer'), sticky=document.getElementById('sticky'), hero=document.getElementById('hero');
+  function onScroll(){ var y=window.scrollY; header.classList.toggle('is-scrolled',y>40);
+    if(sticky) sticky.classList.toggle('is-shown', y>hero.offsetHeight*0.6); }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  function closeDrawer(){ drawer.classList.remove('is-open'); toggle.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+  toggle.addEventListener('click',function(){ var o=drawer.classList.toggle('is-open'); toggle.setAttribute('aria-expanded',String(o)); document.body.style.overflow=o?'hidden':''; });
+  document.querySelectorAll('.js-drawer-link').forEach(function(l){ l.addEventListener('click',closeDrawer); });
+  document.querySelectorAll('.faq__item').forEach(function(it){ var q=it.querySelector('.faq__q'),a=it.querySelector('.faq__a');
+    q.addEventListener('click',function(){ var open=it.classList.toggle('is-open'); a.style.maxHeight=open?(a.scrollHeight+'px'):'0'; }); });
+  var rev=document.querySelectorAll('.js-reveal');
+  if('IntersectionObserver' in window){ var io=new IntersectionObserver(function(es,o){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-shown'); o.unobserve(e.target); } }); },{threshold:.12});
+    rev.forEach(function(el){ io.observe(el); }); } else { rev.forEach(function(el){ el.classList.add('is-shown'); }); }
+})();
+</script>
+</body>
+</html>
